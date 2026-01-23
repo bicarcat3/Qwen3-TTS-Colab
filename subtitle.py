@@ -431,7 +431,7 @@ def write_sentence_srt(
         final_subtitles.append(current_sub)
 
     final_subtitles = merge_punctuation_glitches(final_subtitles)
-    print(final_subtitles)
+    # print(final_subtitles)
     # ==============================================================================
     # NEW CODE BLOCK: Generate JSON data and write files
     # ==============================================================================
@@ -475,8 +475,8 @@ def write_sentence_srt(
     with open(json_output_file, "w", encoding="utf-8") as f_json:
         json.dump(timestamps_data, f_json, indent=4, ensure_ascii=False)
         
-    print(f"Successfully generated SRT file: {output_file}")
-    print(f"Successfully generated JSON file: {json_output_file}")
+    # print(f"Successfully generated SRT file: {output_file}")
+    # print(f"Successfully generated JSON file: {json_output_file}")
     return json_output_file
 
 def write_subtitles_to_file(subtitles, filename="subtitles.srt"):
@@ -565,7 +565,7 @@ def subtitle_maker(media_file, source_lang, target_lang):
 
     translated_srt_path = None
     if detected_lang and detected_lang != target_lang:
-        print(f"TRANSLATING from {detected_lang} to {target_lang}")
+        # print(f"TRANSLATING from {detected_lang} to {target_lang}")
         original_subs = pysrt.open(default_srt, encoding='utf-8')
         translated_subs, _ = translate_subtitle(original_subs, detected_lang, target_lang)
         base_name, ext = os.path.splitext(os.path.basename(default_srt))
