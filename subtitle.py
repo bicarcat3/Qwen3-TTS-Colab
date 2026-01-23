@@ -1,14 +1,4 @@
-# Code written by me, organized with the help of AI.
-"""
-A comprehensive toolkit for generating and translating subtitles from media files.
 
-This module provides functionalities to:
-1. Download AI models from Hugging Face without requiring a token.
-2. Transcribe audio from media files using a high-performance Whisper model.
-3. Generate multiple formats of SRT subtitles (default, professional multi-line, word-level, and shorts-style).
-4. Translate subtitles into different languages.
-5. Orchestrate the entire process through a simple-to-use main function.
-"""
 
 # ==============================================================================
 # --- 1. IMPORTS
@@ -193,32 +183,49 @@ def format_segments(segments):
 
     return sentence_timestamp, words_timestamp, speech_to_text.strip()
 
-def get_audio_file(uploaded_file):
-    """Copies the uploaded media file to a temporary location for processing."""
-    temp_path = os.path.join(TEMP_FOLDER, os.path.basename(uploaded_file))
-    cleaned_path = clean_file_name(temp_path)
-    shutil.copy(uploaded_file, cleaned_path)
-    return cleaned_path
+# def get_audio_file(uploaded_file):
+#     """Copies the uploaded media file to a temporary location for processing."""
+#     temp_path = os.path.join(TEMP_FOLDER, os.path.basename(uploaded_file))
+#     cleaned_path = clean_file_name(temp_path)
+#     shutil.copy(uploaded_file, cleaned_path)
+#     return cleaned_path
+
+
+
+def load_whisper_model(model_name="deepdml/faster-whisper-large-v3-turbo-ct2"):
+  whisper_model=None
+  device = "cuda" if torch.cuda.is_available() else "cpu"
+  compute_type = "float16" if torch.cuda.is_available() else "int8"
+  try:
+    whisper_model = WhisperModel(
+                    model_name,
+                    device=device,
+                    compute_type=compute_type,
+                )
+  except Exception as e:
+    model_dir = download_model(
+                "deepdml/faster-whisper-large-v3-turbo-ct2",
+                download_folder="./",
+                redownload=False)
+    whisper_model = WhisperModel(
+                model_dir,
+                device=device,
+                compute_type=compute_type)
+  return whisper_model
+
 
 def whisper_subtitle(uploaded_file, source_language):
     """
     Main transcription function. Loads the model, transcribes the audio,
     and generates subtitle files.
     """
-    # 1. Configure device and model
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    compute_type = "float16" if torch.cuda.is_available() else "int8"
-    model_dir = download_model(
-        "deepdml/faster-whisper-large-v3-turbo-ct2",
-        download_folder="./",
-        redownload=False
-    )
-    model = WhisperModel(model_dir, device=device, compute_type=compute_type)
-    # model = WhisperModel("deepdml/faster-whisper-large-v3-turbo-ct2",device=device, compute_type=compute_type)
+
+    model = load_whisper_model()
 
 
     # 2. Process audio file
-    audio_file_path = get_audio_file(uploaded_file)
+    # audio_file_path = get_audio_file(uploaded_file)
+    audio_file_path=uploaded_file
 
     # 3. Transcribe
     detected_language = source_language
@@ -233,8 +240,8 @@ def whisper_subtitle(uploaded_file, source_language):
     sentence_timestamps, word_timestamps, transcript_text = format_segments(segments)
 
     # 4. Cleanup
-    if os.path.exists(audio_file_path):
-        os.remove(audio_file_path)
+    # if os.path.exists(audio_file_path):
+    #     os.remove(audio_file_path)
     del model
     gc.collect()
     if torch.cuda.is_available():
