@@ -355,6 +355,7 @@ def build_ui():
         gr.HTML("""
         <div style="text-align: center; margin: 20px auto; max-width: 800px;">
             <h1 style="font-size: 2.5em; margin-bottom: 5px;">🎙️ Qwen3-TTS </h1>
+            <a href="https://colab.research.google.com/github/NeuralFalconYT/Qwen3-TTS-Colab/blob/main/Qwen3_TTS_Colab.ipynb" target="_blank" style="display: inline-block; padding: 10px 20px; background-color: #4285F4; color: white; border-radius: 6px; text-decoration: none; font-size: 1em;">🥳 Run on Google Colab</a>
         </div>""")
 
         with gr.Tabs():
