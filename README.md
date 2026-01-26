@@ -147,8 +147,9 @@ True
 ```bash
 pip install -r requirements.txt
 ```
-
-
+```
+pip install -U flash-attn --no-build-isolation
+```
 ---
 
 ### 5️⃣ (Try this if **Auto Reference Voice Transcription** or **Subtitle Generation** fails in runtime)
