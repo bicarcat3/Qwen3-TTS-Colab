@@ -14,10 +14,10 @@
 
 ### Prerequisites
 
-* **[Python 3.10](https://www.python.org/downloads/release/python-3100/) or newer**
-* **[Git](https://git-scm.com/install/windows)**
+* **[Python 3.10](https://www.python.org/downloads/release/python-3100/) [YT Tutorial](https://www.youtube.com/watch?v=P7Q4_pqj7uc) or newer**
+* **[Git](https://git-scm.com/install/windows) [YT Tutorial](https://www.youtube.com/watch?v=t2-l3WvWvqg)**
 * **NVIDIA GPU**
-* **[Visual Studio Community](https://apps.microsoft.com/detail/XPDCFJDKLZJLP80)** and Download C++ Files 
+* **[Visual Studio Community](https://apps.microsoft.com/detail/XPDCFJDKLZJLP80) [YT Tutorial](https://youtu.be/cLrk2zt4buQ)** and Download C++ Files 
 * *(Optional but recommended)* **Virtual Environment** for dependency isolation
 
 ---
