@@ -216,6 +216,11 @@ python app.py
 > * **Avoid 1.7B models** (very slow / may crash)
 > * **Disable Subtitle Generation** 
 
+### 6️⃣How to delete everything
+Just delete ```Qwen3-TTS-Colab``` Folder  <br>
+For Model Go to this path on windows 
+```C:\Users\<your_pc_user_name>\.cache\huggingface\hub```
+and delete the models 
 
 
 
