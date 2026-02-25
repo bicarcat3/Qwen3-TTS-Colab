@@ -15,6 +15,7 @@ from hf_downloader import download_model
 import gc 
 from huggingface_hub import login
 
+
 HF_TOKEN = os.getenv("HF_TOKEN")
 if HF_TOKEN:
     login(token=HF_TOKEN)
@@ -34,11 +35,35 @@ LANGUAGES = ["Auto", "Chinese", "English", "Japanese", "Korean", "French", "Germ
 # --- Helper Functions ---
 
 def get_model_path(model_type: str, model_size: str) -> str:
-    """Get model path based on type and size."""
-    try:
-      return snapshot_download(f"Qwen/Qwen3-TTS-12Hz-{model_size}-{model_type}")
-    except Exception as e:
-      return download_model(f"Qwen/Qwen3-TTS-12Hz-{model_size}-{model_type}", download_folder="./qwen_tts_model", redownload= False)
+    """優先從 Google Drive 讀取模型，若無則下載並存入 Drive"""
+    repo_id = f"Qwen/Qwen3-TTS-12Hz-{model_size}-{model_type}"
+    
+    # 定義 Google Drive 上的儲存路徑
+    # 將 repo_id 中的 / 換成 _ 以免造成資料夾層級混亂
+    folder_name = repo_id.replace("/", "_")
+    base_drive_path = "/content/drive/MyDrive/Qwen3_Models"
+    local_dir = os.path.join(base_drive_path, folder_name)
+
+    # 檢查模型關鍵檔案 (例如 config.json) 是否已存在
+    config_file = os.path.join(local_dir, "config.json")
+
+    if os.path.exists(config_file):
+        print(f"✅ 發現現有模型：{repo_id}，正在從 Google Drive 直接載入...")
+        return local_dir
+    else:
+        print(f"⏳ Google Drive 未發現模型，開始下載 {repo_id} 並儲存至雲端硬碟...")
+        # 確保父資料夾存在
+        os.makedirs(base_drive_path, exist_ok=True)
+        
+        # 下載並指定存放到 local_dir
+        downloaded_path = snapshot_download(
+            repo_id=repo_id,
+            local_dir=local_dir,
+            local_dir_use_symlinks=False, # 停用符號連結，確保檔案實體存在 Drive
+            resume_download=True          # 支援斷點續傳
+        )
+        print(f"✨ 模型下載完成並已備份至: {downloaded_path}")
+        return downloaded_path
 
 def clear_other_models(keep_key=None):
     """Delete all loaded models except the current one."""
